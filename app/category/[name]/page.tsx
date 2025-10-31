@@ -1,25 +1,34 @@
 import { PrismaClient } from "@/prisma/generated/prisma/client";
-import BookCard from "./component/bookcard";
+import BookCard from "@/app/component/bookcard";
 
-export default async function Home({ searchParams }: {searchParams:any}) {
-  const params=await searchParams
+function sleep(ms:number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+export default async function Home({ searchParams,params }: { searchParams:{search:string},params: { name: string } }) {
+  const par =await params
+  const searc =await searchParams
+  
   const prisma = new PrismaClient()
-  if(params.search){
+  if(searc.search){
     var data = await prisma.books.findMany({
       take:15,
       where:{
+        category:par.name,
         OR:[{
           name:{
-            contains:params.search
+            contains:searc.search
           }},
-        {description:{contains:params.search}},{author:params.search}]
+        {description:{contains:searc.search}},{author:searc.search}]
       }
     })
   }
   else{
-    var data = await prisma.books.findMany({take:15})
+    var data = await prisma.books.findMany({
+        where:{
+            category:par.name
+        },
+        take:15})
   }
-  prisma.$disconnect()
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {data.length === 0 ? (
