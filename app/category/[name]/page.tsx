@@ -13,19 +13,20 @@ export default async function Home({ searchParams,params }: { searchParams:{sear
     var data = await prisma.books.findMany({
       take:15,
       where:{
-        category:par.name,
+        category:par.name.replace("%20"," "),
         OR:[{
           name:{
-            contains:searc.search
+            contains:searc.search.replace("%20"," ")
           }},
         {description:{contains:searc.search}},{author:searc.search}]
       }
     })
   }
   else{
+    console.log(par.name.replace("%20"," "))
     var data = await prisma.books.findMany({
         where:{
-            category:par.name
+            category:par.name.replace("%20"," ")
         },
         take:15})
   }

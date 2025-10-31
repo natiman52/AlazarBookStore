@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const Catagories = [
-    "Sience Fiction","Horror"
+    "Science Fiction","Horror"
   ]
   return (
     <html lang="en">

@@ -11,7 +11,8 @@ interface FilterBarProps {
 export  function FilterBar({ categories }: FilterBarProps) {
     const params = useParams()
     const route = useRouter();
-    const [selectedCategory,setSelectedCatagory] = React.useState(params?.name ? params?.name.replace("%20"," ") : "All")
+    console.log(params)
+    const [selectedCategory,setSelectedCatagory] = React.useState(params?.name ? params?.name[0].replace("%20"," ") : "All")
     const handlecatagory = (cat:string) => {
       setSelectedCatagory(cat)
       route.replace(`/category/${cat}`)
