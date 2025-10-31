@@ -23,9 +23,9 @@ model books {
   description String @db.Text
   rating Float
   image_path String? @db.VarChar(255)
-  file_size String?
+  file_size Int?
   channel_message_id Int?
-  file_name Int?
+  file_name String?
   download_link String? @db.VarChar(255)
   created_at DateTime @default(now())
 }

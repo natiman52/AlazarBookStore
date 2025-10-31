@@ -2,16 +2,20 @@ import Link from "next/link";
 import { FileText,Download } from 'lucide-react';
 interface Props {
     book: {
-        id:Number,
-        image_path:string,
-        name:string,
-        description:string,
-        author:string,
-        category:string,
-        file_size:string,
-
+    category: string,
+    name: string,
+    id: number,
+    author: string,
+    description: string,
+    rating: number,
+    image_path: string | null,
+    file_size: number | null,
+    channel_message_id: number | null,
+    file_name: string | null,
+    download_link: string | null,
     }
 }
+
 function formatBytes(bytes:number, decimals = 2) {
   if (bytes === 0) return '0 Bytes';
 
