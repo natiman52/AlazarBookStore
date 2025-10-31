@@ -4,7 +4,9 @@ import React from "react";
 import { FilterBar } from "./component/FilterBar";
 
 
-
+ export const metadata = {
+      title:"Get freebooks"
+    };
 export default function RootLayout({
   children,
 }: Readonly<{
