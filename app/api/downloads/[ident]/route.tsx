@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from "@/prisma/generated/prisma/client";
 
 type ResponseData = {
@@ -6,7 +7,7 @@ type ResponseData = {
 }
  
 export async function GET(
-  req: NextApiRequest,
+  req: NextRequest,
   {params}:{params:Promise<{ident:string}>} 
 ) {
 
