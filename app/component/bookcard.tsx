@@ -13,11 +13,13 @@ interface Props {
     channel_message_id: number | null,
     file_name: string | null,
     download_link: string | null,
+    downloads: number | null,
     }
 }
 
-function formatBytes(bytes:number, decimals = 2) {
-  if (bytes === 0) return '0 Bytes';
+export function formatBytes(bytes:number | null, decimals = 2) {
+
+  if (bytes === 0 || bytes == null) return '0 Bytes';
 
   const k = 1024; // Or 1000 for SI units
   const dm = decimals < 0 ? 0 : decimals;
@@ -69,7 +71,7 @@ export default function BookCard({book}:Props){
 
 
         <div className="mt-2 text-center text-xs text-gray-400">
-          100 downloads
+          {book.downloads} downloads
         </div>
       </div>
     </div>

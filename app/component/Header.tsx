@@ -6,8 +6,8 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-3">
-            <BookOpen className="w-8 h-8 text-blue-600" />
-            <h1 className="text-2xl font-bold text-gray-900">BookVault</h1>
+            <img src="/image.png" style={{'width':"40px","height":"40px","borderRadius":"50%"}} alt="" />
+            <h1 className="text-2xl font-bold text-gray-900">የመጻሕፍት ዓለም</h1>
           </div>
 
           <div className="flex-1 max-w-2xl mx-8">
