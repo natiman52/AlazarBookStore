@@ -66,7 +66,7 @@ export default async function Home({ params }: { params: { id: number } }) {
                   </div>
                 )}
               </div>
-                <a href={`https://t.me/naticoolbot?start=${book.id}`}>
+                <a href={`/api/downloads/${book.id}`}>
                   <button
                 className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg flex items-center justify-center gap-2 transition-colors duration-200 font-medium"
               >
