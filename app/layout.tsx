@@ -2,9 +2,10 @@ import "./globals.css";
 import { Header } from "@/app/component/Header";
 import React from "react";
 import { FilterBar } from "./component/FilterBar";
+import Script from 'next/script'
 
-
- export const metadata = {
+import { GoogleAnalytics } from '@next/third-parties/google'
+export const metadata = {
       title:"Get freebooks"
     };
 export default function RootLayout({
@@ -17,6 +18,7 @@ export default function RootLayout({
   ]
   return (
     <html lang="en">
+      <GoogleAnalytics gaId="G-KN05KYY1CK" />
       <body>
         <div className="min-h-screen bg-gray-50">
       <Header/>
