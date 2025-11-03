@@ -6,7 +6,7 @@ import Script from 'next/script'
 
 import { GoogleAnalytics } from '@next/third-parties/google'
 export const metadata = {
-      title:"Get freebooks"
+      title:"የመጻሕፍት ዓለም"
     };
 export default function RootLayout({
   children,
@@ -14,10 +14,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const Catagories = [
-    "Science Fiction","Horror"
+   "Science Fiction",
+    "Fantasy",
+    "Thriller",
+    "Self-Help",
+    "Biography",
+    "Horror",
   ]
   return (
     <html lang="en">
+      <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8533445848126839"  crossOrigin="anonymous"/>
       <GoogleAnalytics gaId="G-KN05KYY1CK" />
       <body>
         <div className="min-h-screen bg-gray-50">
