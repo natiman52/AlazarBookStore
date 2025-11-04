@@ -6,7 +6,7 @@ import Script from 'next/script'
 import Footer from "./component/Footer";
 import { GoogleAnalytics } from '@next/third-parties/google'
 export const metadata = {
-      title:"የመጻሕፍት ዓለም"
+      title:"Yemesahft Alem"
     };
 
   export const Catagories = [
