@@ -51,11 +51,11 @@ export default function BookCard({book}:Props){
       </div>
 
       <div className="p-4">
-        <Link href={`/${book.id}`}
+        <a href={`/${book.id}`}
           className="font-semibold text-gray-900 line-clamp-2 mb-1 group-hover:text-blue-600 transition-colors cursor-pointer"
         >
           {book.name}
-        </Link>
+        </a>
         <p className="text-sm text-gray-600 mb-2">{book.author}</p>
 
         {book.description && (

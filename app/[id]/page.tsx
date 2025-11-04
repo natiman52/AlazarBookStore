@@ -24,12 +24,12 @@ export default async function Home({ params }: { params: { id: number } }) {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Book not found</h2>
-          <Link href={"/"}
+          <a href={"/"}
             className="text-blue-600 hover:text-blue-700 flex items-center gap-2 mx-auto"
           >
             <ArrowLeft className="w-5 h-5" />
             Back to library
-          </Link>
+          </a>
         </div>
       </div>
     );
@@ -39,13 +39,13 @@ export default async function Home({ params }: { params: { id: number } }) {
     <div className="min-h-screen bg-gray-50">
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Link
+          <a
             href={"/"}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             Back to library
-          </Link>
+          </a>
         </div>
       </div>
 
@@ -162,9 +162,9 @@ export default async function Home({ params }: { params: { id: number } }) {
                     )}
                   </div>
                   <div className="p-3">
-                    <Link href={`/${relatedBook.id}`} className="font-semibold text-sm text-gray-900 line-clamp-2 mb-1">
+                    <a href={`/${relatedBook.id}`} className="font-semibold text-sm text-gray-900 line-clamp-2 mb-1">
                       {relatedBook.name}
-                    </Link>
+                    </a>
                     <p className="text-xs text-gray-600">{relatedBook.author}</p>
                   </div>
                 </div>

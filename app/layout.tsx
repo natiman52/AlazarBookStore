@@ -3,17 +3,13 @@ import { Header } from "@/app/component/Header";
 import React from "react";
 import { FilterBar } from "./component/FilterBar";
 import Script from 'next/script'
-
+import Footer from "./component/Footer";
 import { GoogleAnalytics } from '@next/third-parties/google'
 export const metadata = {
       title:"የመጻሕፍት ዓለም"
     };
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const Catagories = [
+
+  export const Catagories = [
    "Science Fiction",
     "Fantasy",
     "Thriller",
@@ -21,6 +17,12 @@ export default function RootLayout({
     "Biography",
     "Horror",
   ]
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+
   return (
     <html lang="en">
       <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8533445848126839"  crossOrigin="anonymous"/>
@@ -34,6 +36,7 @@ export default function RootLayout({
         />
       )}
         {children}
+      <Footer/>
         </div>
       </body>
     </html>

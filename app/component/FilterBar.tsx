@@ -7,12 +7,17 @@ interface FilterBarProps {
 
 }
 
+interface params {
+  name: string;
+
+}
 
 export  function FilterBar({ categories }: FilterBarProps) {
     const params = useParams()
     const route = useRouter();
-    console.log(params)
-    const [selectedCategory,setSelectedCatagory] = React.useState(params?.name ? params?.name[0].replace("%20"," ") : "All")
+    const val = params?.name ? String(params?.name).replace("%20"," ") : "All"
+    const [selectedCategory,setSelectedCatagory] = React.useState(val)
+    console.log(selectedCategory)
     const handlecatagory = (cat:string) => {
       setSelectedCatagory(cat)
       route.replace(`/category/${cat}`)
