@@ -11,6 +11,7 @@ export default async function Home({ searchParams,params }: { searchParams:{sear
   
   const prisma = new PrismaClient()
   if(searc.search){
+    // When searching, include all books (including "exclude" category)
     var data = await prisma.books.findMany({
       take:15,
       where:{
@@ -24,10 +25,14 @@ export default async function Home({ searchParams,params }: { searchParams:{sear
     })
   }
   else{
+    // When not searching, exclude books with "exclude" category
     console.log(par.name.replace("%20"," "))
     var data = await prisma.books.findMany({
         where:{
-            category:par.name.replace("%20"," ")
+            category:par.name.replace("%20"," "),
+            NOT: {
+              category: "school"
+            }
         },
         take:15})
   }

@@ -15,12 +15,18 @@ export async function GET(request: NextRequest) {
     // Build where clause for search
     let whereClause: any = {};
     if (search) {
+      // When searching, include all books (including "exclude" category)
       whereClause = {
         OR: [
           { name: { contains: search } },
           { description: { contains: search } },
           { author: { contains: search } }
         ]
+      };
+    } else {
+      // When not searching, exclude books with "exclude" category
+      whereClause = {
+        category: { not: "school" }
       };
     }
 

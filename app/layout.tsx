@@ -15,7 +15,8 @@ import Script from 'next/script'
     "Philosophy",
     "Psychology",
     "Biography",
-    "Others"
+    "Others",
+    "school"
 
   ]
   export interface Book {

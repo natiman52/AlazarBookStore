@@ -20,7 +20,8 @@ export default async function HomePage() {
     where: {
       rating: { 
         gte: 5
-      }
+      },
+      category: { not: "school" }
     }
   });
   

@@ -13,12 +13,18 @@ export default async function Home({ searchParams }: {searchParams:any}) {
   // Build where clause for search
   let whereClause: any = {}
   if (params.search) {
+    // When searching, include all books (including "exclude" category)
     whereClause = {
       OR: [
         { name: { contains: params.search as string } },
         { description: { contains: params.search as string } },
         { author: { contains: params.search as string } }
       ]
+    }
+  } else {
+    // When not searching, exclude books with "exclude" category
+    whereClause = {
+      category: { not: "school" }
     }
   }
 
@@ -44,13 +50,17 @@ export default async function Home({ searchParams }: {searchParams:any}) {
       { downloads: 'desc' }
     ],
     where: {
-      rating: { gte: 7 }
+      rating: { gte: 7 },
+      category: { not: "school" }
     }
   })
 
   // Get all books for random picker (limited to 100 for performance)
   const allBooksForRandom = await prisma.books.findMany({
     take: 100,
+    where: {
+      category: { not: "school" }
+    },
     select: {
       id: true,
       name: true,

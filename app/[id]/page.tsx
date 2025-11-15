@@ -13,7 +13,10 @@ export default async function Home({ params }: { params: { id: string } }) {
         slug:{
           not:book?.slug
         },
-        category:book?.category
+        category:book?.category,
+        NOT: {
+          category: "school"
+        }
       },
       take:3,
       
