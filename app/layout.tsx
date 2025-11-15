@@ -4,6 +4,7 @@ import React from "react";
 import SupportButton from "./component/SupportButton";
 import Footer from "./component/Footer";
 import { GoogleAnalytics } from '@next/third-parties/google'
+import Script from 'next/script'
 
 
   export const Catagories = [
@@ -40,6 +41,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+        <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8533445848126839"  crossOrigin="anonymous"/>
       <GoogleAnalytics gaId="G-KN05KYY1CK" />
       <body>
         <div className="min-h-screen bg-gray-50">
