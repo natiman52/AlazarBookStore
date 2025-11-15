@@ -1,8 +1,7 @@
 import { PrismaClient } from "@/prisma/generated/prisma/client";
 import { ArrowLeft, Download, Calendar, FileText, User, Tag, TrendingUp } from 'lucide-react';
-import Link from "next/link";
-import { formatBytes } from "../component/bookcard";
 
+import GetByte from "../component/clients/getBytes";
 export default async function Home({ params }: { params: { id: string } }) {
   const param =await params
     const prisma = new PrismaClient()
@@ -87,7 +86,7 @@ export default async function Home({ params }: { params: { id: string } }) {
                 <div className="flex items-center gap-3 text-sm text-gray-600">
                   <FileText className="w-5 h-5 text-gray-400" />
                   <span className="font-medium">Size:</span>
-                  <span>{formatBytes(book.file_size)}</span>
+                  <span><GetByte size={book?.file_size}/></span>
                 </div>
 
                 <div className="flex items-center gap-3 text-sm text-gray-600">
@@ -132,7 +131,7 @@ export default async function Home({ params }: { params: { id: string } }) {
                   </div>
                   <div>
                     <p className="text-sm text-gray-500 mb-1">File Size</p>
-                    <p className="font-medium text-gray-900">{formatBytes(book.file_size)}</p>
+                    <p className="font-medium text-gray-900"><GetByte size={book.file_size}/></p>
                   </div>
                 </div>
               </div>
