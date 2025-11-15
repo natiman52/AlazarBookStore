@@ -8,11 +8,7 @@ export default function SearchAway(){
     const path =usePathname()
     const handleclick = (e:React.KeyboardEvent) => {
         if(e.code == "Enter"){
-            if(path == "category" || path == '/' ){
-                router.replace(`?search=${search}`)
-            }else{
-                router.replace(`/?search=${search}`)
-            }
+            window.location.href =`?search=${search}`
         }
       }
     return (
