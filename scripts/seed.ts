@@ -151,7 +151,6 @@ async function main() {
       const slug = generateSlug(book.name, book.author);
       await prisma.books.create({
         data: {
-          id :book.id,
           name: book.name,
           author: book.author,
           category: book.category,
