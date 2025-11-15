@@ -1,21 +1,5 @@
-import Link from "next/link";
 import { FileText,Download } from 'lucide-react';
-interface Props {
-    book: {
-    category: string,
-    name: string,
-    id: number,
-    author: string,
-    description: string,
-    rating: number,
-    image_path: string | null,
-    file_size: number | null,
-    channel_message_id: number | null,
-    file_name: string | null,
-    download_link: string | null,
-    downloads: number | null,
-    }
-}
+import { Book } from "../layout";
 
 export function formatBytes(bytes:number | null, decimals = 2) {
 
@@ -29,7 +13,7 @@ export function formatBytes(bytes:number | null, decimals = 2) {
 
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
-export default function BookCard({book}:Props){
+export default function BookCard({book}:{book:Book}){
     return (
    <div className="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100">
       <div 
@@ -51,7 +35,7 @@ export default function BookCard({book}:Props){
       </div>
 
       <div className="p-4">
-        <a href={`/${book.id}`}
+        <a href={`/${book.slug}`}
           className="font-semibold text-gray-900 line-clamp-2 mb-1 group-hover:text-blue-600 transition-colors cursor-pointer"
         >
           {book.name}

@@ -1,6 +1,7 @@
 import { PrismaClient } from "@/prisma/generated/prisma/client";
 import BookCard from "@/app/component/bookcard";
-
+import { Catagories } from "@/app/layout";
+import { FilterBar } from "@/app/component/FilterBar";
 function sleep(ms:number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -31,6 +32,12 @@ export default async function Home({ searchParams,params }: { searchParams:{sear
         take:15})
   }
   return (
+    <>
+    {Catagories.length > 0 && (
+      <FilterBar
+        categories={Catagories}
+      />
+    )}
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {data.length === 0 ? (
           <div className="text-center py-16">
@@ -53,5 +60,6 @@ export default async function Home({ searchParams,params }: { searchParams:{sear
           </>
         )}
       </main>
+    </>
   );
 }

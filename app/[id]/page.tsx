@@ -3,16 +3,16 @@ import { ArrowLeft, Download, Calendar, FileText, User, Tag, TrendingUp } from '
 import Link from "next/link";
 import { formatBytes } from "../component/bookcard";
 
-export default async function Home({ params }: { params: { id: number } }) {
+export default async function Home({ params }: { params: { id: string } }) {
   const param =await params
     const prisma = new PrismaClient()
     const book = await prisma.books.findFirst({
-      where:{id:Number(param.id)}
+      where:{slug:param.id}
     })
     const relatedBooks = await prisma.books.findMany({
       where:{
-        id:{
-          not:book?.id
+        slug:{
+          not:book?.slug
         },
         category:book?.category
       },
@@ -93,13 +93,13 @@ export default async function Home({ params }: { params: { id: number } }) {
                 <div className="flex items-center gap-3 text-sm text-gray-600">
                   <TrendingUp className="w-5 h-5 text-gray-400" />
                   <span className="font-medium">Downloads:</span>
-                  <span></span>
+                  <span>{book.downloads}</span>
                 </div>
 
                 <div className="flex items-center gap-3 text-sm text-gray-600">
                   <Calendar className="w-5 h-5 text-gray-400" />
                   <span className="font-medium">Added:</span>
-                  <span>{book.created_at.toISOString()}</span>
+                  <span>{book.created_at.toDateString()}</span>
                 </div>
               </div>
             </div>
@@ -162,7 +162,7 @@ export default async function Home({ params }: { params: { id: number } }) {
                     )}
                   </div>
                   <div className="p-3">
-                    <a href={`/${relatedBook.id}`} className="font-semibold text-sm text-gray-900 line-clamp-2 mb-1">
+                    <a href={`/${relatedBook.slug}`} className="font-semibold text-sm text-gray-900 line-clamp-2 mb-1">
                       {relatedBook.name}
                     </a>
                     <p className="text-xs text-gray-600">{relatedBook.author}</p>

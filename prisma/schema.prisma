@@ -29,4 +29,5 @@ model books {
   download_link String? @db.VarChar(255)
   created_at DateTime @default(now())
   downloads Int? @default(0)
+  slug String?
 }
