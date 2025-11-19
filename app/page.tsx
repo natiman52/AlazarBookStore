@@ -6,6 +6,12 @@ import Sidebar from "./component/Sidebar";
 
 const ITEMS_PER_PAGE = 15;
 
+export const metadata = {
+  metadataBase: new URL(process.env.BASE_URL || "https://yemesahftalem.com/"),
+  alternates: {
+    canonical: "/", // or the specific path for the page
+  },
+};
 export default async function Home({ searchParams }: {searchParams:any}) {
   const params = await searchParams;
   const prisma = new PrismaClient();
