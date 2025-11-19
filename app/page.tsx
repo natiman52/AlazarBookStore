@@ -100,12 +100,6 @@ export default async function Home({ searchParams }: {searchParams:any}) {
               </div>
             ) : (
               <>
-                <div className="mb-6">
-                  <p className="text-gray-600">
-                    {totalCount} {totalCount === 1 ? 'book' : 'books'}
-                    {params.search && ` found for "${params.search}"`}
-                  </p>
-                </div>
                 <LoadMore 
                   initialBooks={data}
                   initialHasMore={hasMore}
