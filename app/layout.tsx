@@ -49,7 +49,6 @@ export default function RootLayout({
         src="https://ezojs.com/ezoic/sa.min.js"
         async={true}
         strategy="beforeInteractive"
-        crossOrigin="anonymous"
       />
       <GoogleAnalytics gaId="G-KN05KYY1CK" />
       <body>
