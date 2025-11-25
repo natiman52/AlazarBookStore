@@ -1,5 +1,5 @@
 "use client";
-
+import { useEffect } from "react";
 import { Star, Shuffle, TrendingUp } from "lucide-react";
 import { Book } from "../layout";
 import { useState } from "react";
@@ -17,7 +17,28 @@ export default function Sidebar({ bestBooks, allBooks }: SidebarProps) {
     const randomIndex = Math.floor(Math.random() * allBooks.length);
     setRandomBook(allBooks[randomIndex]);
   };
+  useEffect(() => {
+    const handleEzoicLoad = () => {
+      try {
+        const ezoic = window.ezstandalone;
+        if (ezoic) {
+          ezoic.define(103, 104, 105, 106);
+          if (!ezoic.enabled) {
+            ezoic.enable();
+            ezoic.display();
+            ezoic.refresh();
+          }
+        } else {
+          // Ezoic script is not loaded yet, try again later
+          setTimeout(handleEzoicLoad, 500);
+        }
+      } catch (ex) {
+        console.error("Error with Ezoic:", ex);
+      }
+    };
 
+    handleEzoicLoad();
+  }, []);
   return (
     <aside className="w-full lg:w-80 space-y-6">
       {/* Random Book Picker */}
@@ -111,6 +132,10 @@ export default function Sidebar({ bestBooks, allBooks }: SidebarProps) {
           </div>
         )}
       </div>
+      {/* place holder for ad*/}
+        <div className="ezoic-pub-ad-placeholder-106">
+
+        </div>
     </aside>
   );
 }

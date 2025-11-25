@@ -42,7 +42,10 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-        <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8533445848126839"  crossOrigin="anonymous"/>
+        <Script async={true} src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8533445848126839"  crossOrigin="anonymous"/>
+        <Script src="https://the.gatekeeperconsent.com/cmp.min.js" data-cfasync="false" />
+        <Script src="https://cmp.gatekeeperconsent.com/min.js" data-cfasync="false" />
+        <Script async={true} src="https://www.ezojs.com/ezoic/sa.min.js" strategy="beforeInteractive" crossOrigin="anonymous"/>
       <GoogleAnalytics gaId="G-KN05KYY1CK" />
       <body>
         <div className="min-h-screen bg-gray-50">
