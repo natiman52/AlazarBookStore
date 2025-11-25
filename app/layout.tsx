@@ -42,6 +42,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <head>
         <Script async={true} src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8533445848126839"  crossOrigin="anonymous"/>
         <Script src="https://the.gatekeeperconsent.com/cmp.min.js" data-cfasync="false" />
         <Script src="https://cmp.gatekeeperconsent.com/min.js" data-cfasync="false" />
@@ -51,6 +52,7 @@ export default function RootLayout({
         strategy="beforeInteractive"
       />
       <GoogleAnalytics gaId="G-KN05KYY1CK" />
+      </head>
       <body>
         <div className="min-h-screen bg-gray-50">
       <Header/>
