@@ -22,7 +22,7 @@ export default function Sidebar({ bestBooks, allBooks }: SidebarProps) {
       try {
         const ezoic = window.ezstandalone;
         if (ezoic) {
-          ezoic.define(103, 104, 105, 106);
+          ezoic.define(106);
           if (!ezoic.enabled) {
             ezoic.enable();
             ezoic.display();
