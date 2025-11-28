@@ -12,7 +12,9 @@ export function Header() {
         <div style={style.topheader} className="flex items-center justify-between ">
           <div className="flex items-center gap-3">
             <img src="/image.png" style={{'width':"40px","height":"40px","borderRadius":"50%"}} alt="" />
+            <a href="/">
             <h1 className="text-2xl font-bold text-gray-900">Yemesahft Alem</h1>
+            </a>
           </div>
 
           <div style={style.searchbar} className="flex-1 max-w-2xl">

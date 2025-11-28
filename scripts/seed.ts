@@ -171,6 +171,46 @@ async function main() {
     }
   }
 
+  console.log("\nSeeding blogs...");
+  const blogsData = [
+    {
+      title: "The Future of Reading",
+      content: "Reading is evolving with technology. From e-books to audiobooks, the way we consume literature is changing. However, the core essence of storytelling remains the same. In this digital age, accessibility to books has increased, allowing more people to enjoy the wonders of reading.",
+      author: "Natnael",
+      image_path: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&q=80&w=2070",
+    },
+    {
+      title: "Top 10 Ethiopian Books",
+      content: "Ethiopian literature is rich and diverse, with a long history of storytelling. From 'Fikir Eske Mekabir' to 'Oromay', these books offer a glimpse into the culture, history, and soul of Ethiopia. In this post, we explore the top 10 must-read Ethiopian books that have shaped the literary landscape.",
+      author: "Alazar",
+      image_path: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=2098",
+    },
+    {
+      title: "Why Printed Books Still Matter",
+      content: "In a digital age, the tactile experience of a book is irreplaceable. The smell of paper, the sound of turning pages, and the weight of a book in your hand create a unique connection. Printed books offer a respite from screens and a chance to disconnect and truly immerse oneself in a story.",
+      author: "BookLover",
+      image_path: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&q=80&w=2070",
+    }
+  ];
+
+  for (const blog of blogsData) {
+    const slug = blog.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+    try {
+      await prisma.blog.create({
+        data: {
+          title: blog.title,
+          content: blog.content,
+          author: blog.author,
+          slug: slug,
+          image_path: blog.image_path
+        }
+      });
+      console.log(`✓ Added blog: ${blog.title}`);
+    } catch (e) {
+      console.error(`✗ Error adding blog ${blog.title}:`, e);
+    }
+  }
+
   console.log("\nSeeding completed!");
 }
 

@@ -22,6 +22,12 @@ export default function Footer(){
                         Privacy Policy
                     </Link>
                     <Link 
+                        href="/blog" 
+                        className="text-gray-600 hover:text-blue-600 transition-colors"
+                    >
+                        Blog
+                    </Link>
+                    <Link 
                         href="/terms-of-service" 
                         className="text-gray-600 hover:text-blue-600 transition-colors"
                     >

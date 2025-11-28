@@ -31,3 +31,14 @@ model books {
   downloads Int? @default(0)
   slug String?
 }
+
+model Blog {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(255)
+  content   String   @db.Text
+  author    String?  @db.VarChar(255)
+  slug      String   @unique @db.VarChar(255)
+  image_path String? @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
