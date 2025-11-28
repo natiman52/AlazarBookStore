@@ -1,9 +1,14 @@
-import { getBlogs } from '../actions/blog'
+import { PrismaClient } from '@/prisma/generated/prisma/client'
+
 import Link from 'next/link'
 
 export default async function BlogPage() {
-  const blogs = await getBlogs()
-
+  const prisma = new PrismaClient()
+  const blogs = await prisma.blog.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+  })
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold mb-8 text-center">Our Blog</h1>

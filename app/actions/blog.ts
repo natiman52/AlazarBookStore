@@ -35,13 +35,6 @@ export async function createBlog(formData: FormData) {
   redirect('/blog')
 }
 
-export async function getBlogs() {
-  return await prisma.blog.findMany({
-    orderBy: {
-      createdAt: 'desc',
-    },
-  })
-}
 
 export async function getBlogBySlug(slug: string) {
   return await prisma.blog.findUnique({
