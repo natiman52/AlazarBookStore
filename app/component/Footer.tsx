@@ -5,7 +5,7 @@ export default function Footer(){
         <div className="w-100 border-t my-3 pt-5 mx-auto container">
             <div className="flex flex-col items-center gap-3">
                 <p className="mb-0 text-sm text-gray-600">
-                    All rights reserved by <span className="text-blue-500">@yemesahftalem.com</span>
+                    All rights reserved by <span className="text-blue-500">@AbysiniaTech</span>
                 </p>
                 
                 <p className="text-xs text-gray-500 text-center max-w-2xl px-4 mt-1">
