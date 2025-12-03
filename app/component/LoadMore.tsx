@@ -10,9 +10,10 @@ interface LoadMoreProps {
   initialBooks: Book[];
   initialHasMore: boolean;
   searchQuery?: string;
+  category?: string;
 }
 
-export default function LoadMore({ initialBooks, initialHasMore, searchQuery }: LoadMoreProps) {
+export default function LoadMore({ initialBooks, initialHasMore, searchQuery, category }: LoadMoreProps) {
   const [books, setBooks] = useState<Book[]>(initialBooks);
   const [hasMore, setHasMore] = useState(initialHasMore);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,6 +29,9 @@ export default function LoadMore({ initialBooks, initialHasMore, searchQuery }: 
       params.set("page", nextPage.toString());
       if (searchQuery) {
         params.set("search", searchQuery);
+      }
+      if (category) {
+        params.set("category", category);
       }
 
       const response = await fetch(`/api/books?${params.toString()}`);

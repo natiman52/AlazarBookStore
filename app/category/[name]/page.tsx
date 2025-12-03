@@ -1,7 +1,8 @@
 import { PrismaClient } from "@/prisma/generated/prisma/client";
-import BookCard from "@/app/component/bookcard";
 import { Catagories } from "@/app/layout";
 import { FilterBar } from "@/app/component/FilterBar";
+import LoadMore from "@/app/component/LoadMore";
+
 function sleep(ms:number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -10,32 +11,47 @@ export default async function Home({ searchParams,params }: { searchParams:{sear
   const searc =await searchParams
   
   const prisma = new PrismaClient()
+  const ITEMS_PER_PAGE = 15;
+  
+  let whereClause: any = {};
+
   if(searc.search){
     // When searching, include all books (including "exclude" category)
-    var data = await prisma.books.findMany({
-      take:15,
-      where:{
-        category:par.name.replace("%20"," "),
-        OR:[{
-          name:{
-            contains:searc.search.replace("%20"," ")
-          }},
-        {description:{contains:searc.search}},{author:searc.search}]
-      }
-    })
+    whereClause = {
+      category:par.name.replace("%20"," "),
+      OR:[{
+        name:{
+          contains:searc.search.replace("%20"," ")
+        }},
+      {description:{contains:searc.search}},{author:searc.search}]
+    }
   }
   else{
     // When not searching, exclude books with "exclude" category
     console.log(par.name.replace("%20"," "))
-    var data = await prisma.books.findMany({
-        where:{
-            category:par.name.replace("%20"," "),
-            NOT: {
-              category: "school"
-            }
-        },
-        take:15})
+    whereClause = {
+        category:par.name.replace("%20"," "),
+        NOT: {
+          category: "school"
+        }
+    }
   }
+
+  const [data, totalCount] = await Promise.all([
+    prisma.books.findMany({
+      where: whereClause,
+      take: ITEMS_PER_PAGE,
+      orderBy: {
+        id: 'desc'
+      }
+    }),
+    prisma.books.count({
+      where: whereClause,
+    })
+  ]);
+
+  const hasMore = totalCount > ITEMS_PER_PAGE;
+
   return (
     <>
     {Catagories.length > 0 && (
@@ -54,14 +70,16 @@ export default async function Home({ searchParams,params }: { searchParams:{sear
           <>
             <div className="mb-6">
               <p className="text-gray-600">
-                Showing {data.length} {data.length === 1 ? 'book' : 'books'}
+                Showing {data.length} {data.length === 1 ? 'book' : 'books'} of {totalCount}
               </p>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-              {data.map((book) => (
-                <BookCard key={book.id} book={book}/>
-              ))}
-            </div>
+            
+            <LoadMore 
+              initialBooks={data} 
+              initialHasMore={hasMore} 
+              category={par.name.replace("%20", " ")}
+              searchQuery={searc.search}
+            />
           </>
         )}
       </main>

@@ -13,21 +13,24 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * ITEMS_PER_PAGE;
 
     // Build where clause for search
+    const category = searchParams.get("category");
+
+    // Build where clause
     let whereClause: any = {};
+    
+    if (category) {
+      whereClause.category = category;
+    } else if (!search) {
+      // When not searching and no category specified, exclude books with "exclude" category
+      whereClause.category = { not: "school" };
+    }
+
     if (search) {
-      // When searching, include all books (including "exclude" category)
-      whereClause = {
-        OR: [
-          { name: { contains: search } },
-          { description: { contains: search } },
-          { author: { contains: search } }
-        ]
-      };
-    } else {
-      // When not searching, exclude books with "exclude" category
-      whereClause = {
-        category: { not: "school" }
-      };
+      whereClause.OR = [
+        { name: { contains: search } },
+        { description: { contains: search } },
+        { author: { contains: search } }
+      ];
     }
 
     // Get total count

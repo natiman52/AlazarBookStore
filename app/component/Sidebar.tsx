@@ -17,28 +17,6 @@ export default function Sidebar({ bestBooks, allBooks }: SidebarProps) {
     const randomIndex = Math.floor(Math.random() * allBooks.length);
     setRandomBook(allBooks[randomIndex]);
   };
-  useEffect(() => {
-    const handleEzoicLoad = () => {
-      try {
-        const ezoic = window.ezstandalone;
-        if (ezoic) {
-          ezoic.define(106);
-          if (!ezoic.enabled) {
-            ezoic.enable();
-            ezoic.display();
-            ezoic.refresh();
-          }
-        } else {
-          // Ezoic script is not loaded yet, try again later
-          setTimeout(handleEzoicLoad, 500);
-        }
-      } catch (ex) {
-        console.error("Error with Ezoic:", ex);
-      }
-    };
-
-    handleEzoicLoad();
-  }, []);
   return (
     <aside className="w-full lg:w-80 space-y-6">
       {/* Random Book Picker */}
