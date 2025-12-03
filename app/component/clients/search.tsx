@@ -8,7 +8,7 @@ export default function SearchAway(){
     const path =usePathname()
     const handleclick = (e:React.KeyboardEvent) => {
         if(e.code == "Enter"){
-            window.location.href =`?search=${search}`
+            window.location.href =`/?search=${search}`
         }
       }
     return (
