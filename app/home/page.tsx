@@ -84,7 +84,7 @@ export default async function HomePage() {
             </div>
             <div>
               <div className="flex justify-center mb-3">
-                <Star className="w-8 h-8 text-blue-600" />
+                <Star fill="blue" strokeWidth={0} className="w-8 h-8 text-blue-600 " />
               </div>
               <h3 className="text-3xl font-bold text-gray-900 mb-2">Free</h3>
               <p className="text-gray-600">All Downloads</p>
@@ -147,16 +147,29 @@ export default async function HomePage() {
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {["Science Fiction", "Fantasy", "Thriller", "Self-Help", "Biography", "Horror"].map((category) => (
+            {[
+              { name: "Ethiopian Fiction", image: "/category_images/ethiopian_fiction.png" },
+              { name: "History", image: "/category_images/history.png" },
+              { name: "Science", image: "/category_images/science.png" },
+              { name: "Religion", image: "/category_images/religion.png" },
+              { name: "Philosophy", image: "/category_images/philosophy.png" },
+              { name: "Psychology", image: "/category_images/psychology.png" }
+            ].map((category) => (
               <Link
-                key={category}
-                href={`/category/${category}`}
-                className="group bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-6 text-center hover:from-blue-50 hover:to-blue-100 transition-all duration-300 border border-gray-200 hover:border-blue-300 hover:shadow-lg"
+                key={category.name}
+                href={`/category/${category.name}`}
+                className="group relative overflow-hidden rounded-lg aspect-square shadow-md hover:shadow-xl transition-all duration-300"
               >
-                <div className="text-3xl mb-3">📚</div>
-                <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                  {category}
-                </h3>
+                <img 
+                  src={category.image} 
+                  alt={category.name}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-end justify-center p-4">
+                  <h3 className="font-bold text-white text-lg text-center group-hover:text-blue-200 transition-colors">
+                    {category.name}
+                  </h3>
+                </div>
               </Link>
             ))}
           </div>

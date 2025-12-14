@@ -2,6 +2,9 @@ import { PrismaClient } from '@/prisma/generated/prisma/client'
 
 import Link from 'next/link'
 
+export const metadata ={
+  title:"Blogs"
+}
 export default async function BlogPage() {
   const prisma = new PrismaClient()
   const blogs = await prisma.blog.findMany({

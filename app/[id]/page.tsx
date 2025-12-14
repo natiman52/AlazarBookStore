@@ -2,6 +2,20 @@ import { PrismaClient } from "@/prisma/generated/prisma/client";
 import { ArrowLeft, Download, Calendar, FileText, User, Tag, TrendingUp } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import GetByte from "../component/clients/getBytes";
+import { Metadata } from 'next';
+
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  const param = await params
+  const prisma = new PrismaClient()
+  const book = await prisma.books.findFirst({
+    where: { slug: param.id }
+  })
+  
+  return {
+    title: book?.name || 'Book Details',
+  }
+}
+
 export default async function Home({ params }: { params: { id: string } }) {
   const param =await params
     const prisma = new PrismaClient()

@@ -2,6 +2,17 @@ import { getBlogBySlug, getOtherBlogs } from '../../actions/blog'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 
+import { Metadata } from 'next'
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const blog = await getBlogBySlug(slug)
+
+  return {
+    title: blog?.title || 'Blog Post',
+  }
+}
+
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const blog = await getBlogBySlug(slug)

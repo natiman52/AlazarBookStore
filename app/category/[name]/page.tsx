@@ -3,8 +3,13 @@ import { Catagories } from "@/app/layout";
 import { FilterBar } from "@/app/component/FilterBar";
 import LoadMore from "@/app/component/LoadMore";
 
-function sleep(ms:number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+import { Metadata } from "next";
+
+export async function generateMetadata({ searchParams,params }: { searchParams:{search:string},params: { name: string } }): Promise<Metadata>{
+  const para = await params
+  return {
+    title:`Category: ${para.name.replaceAll("%20"," ")}`,
+  }
 }
 export default async function Home({ searchParams,params }: { searchParams:{search:string},params: { name: string } }) {
   const par =await params

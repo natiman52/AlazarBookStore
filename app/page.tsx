@@ -3,10 +3,12 @@ import { Catagories } from "./layout";
 import { FilterBar } from "./component/FilterBar";
 import LoadMore from "./component/LoadMore";
 import Sidebar from "./component/Sidebar";
+import { title } from "process";
 
 const ITEMS_PER_PAGE = 15;
 
 export const metadata = {
+  title:"Yemesahft Alem",
   metadataBase: new URL(process.env.BASE_URL || "https://yemesahftalem.com/"),
   alternates: {
     canonical: "/", // or the specific path for the page
