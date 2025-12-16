@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     const password = formData.get("password") as string;
 
     // 1. Validate Password
-    if (password !== process.env.ADMIN_PASSWORD || password !== "admin123") {
+    if (password !== process.env.ADMIN_PASSWORD ) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
