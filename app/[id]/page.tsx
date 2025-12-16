@@ -1,8 +1,9 @@
 import { PrismaClient } from "@/prisma/generated/prisma/client";
-import { ArrowLeft, Download, Calendar, FileText, User, Tag, TrendingUp } from 'lucide-react';
+import { ArrowLeft, Download, Calendar, FileText, User, Tag, TrendingUp, MessageCircle } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import GetByte from "../component/clients/getBytes";
 import { Metadata } from 'next';
+import Comments from "../component/clients/comments";
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const param = await params
@@ -143,6 +144,10 @@ export default async function Home({ params }: { params: { id: string } }) {
             </div>
           </div>
         </div>
+        <div className="mt-12">
+          <Comments bookId={book.id} />
+        </div>
+
         {relatedBooks.length > 0 && (
           <div className="mt-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">More books in {book.category}</h2>

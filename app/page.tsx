@@ -23,7 +23,6 @@ export default async function Home({ searchParams }: {searchParams:any}) {
     whereClause = {
       OR: [
         { name: { contains: params.search as string } },
-        { description: { contains: params.search as string } },
         { author: { contains: params.search as string } }
       ]
     };

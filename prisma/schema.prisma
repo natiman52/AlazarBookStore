@@ -1,3 +1,4 @@
+
 generator client {
   provider = "prisma-client"
   output   = "./generated/prisma"
@@ -9,20 +10,52 @@ datasource db {
 }
 
 model books {
-  id                 Int      @id @default(autoincrement())
-  name               String   @db.VarChar(255)
+  id                 Int       @id @default(autoincrement())
+  name               String    @db.VarChar(255)
   author             String
-  description        String   @db.Text
+  description        String    @db.Text
   rating             Float
-  download_link      String?  @db.VarChar(255)
-  created_at         DateTime @default(now())
-  category           String   @default("testing") @db.VarChar(255)
+  download_link      String?   @db.VarChar(255)
+  created_at         DateTime  @default(now())
+  category           String    @default("testing") @db.VarChar(255)
   file_size          Int?
-  image_path         String?  @db.VarChar(255)
+  image_path         String?   @db.VarChar(255)
   channel_message_id Int?
   file_name          String?
-  downloads          Int?     @default(0)
+  downloads          Int?      @default(0)
   slug               String?
+  comments           Comment[]
+}
+
+model User {
+  id              String    @id
+  name            String    @db.Text
+  email           String    @unique
+  emailVerified   Boolean   @default(false)
+  image           String?   @db.Text
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  role            String?   @default("user")
+  accounts        Account[]
+  sessions        Session[]
+  comments        Comment[]
+  username        String?
+  displayUsername String?   @db.Text
+
+  @@map("user")
+  @@unique([username])
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+
+  book   books @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  bookId Int
+
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId String?
 }
 
 model Blog {
@@ -34,4 +67,51 @@ model Blog {
   image_path String?  @db.VarChar(255)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?  @db.Text
+  userAgent String?  @db.Text
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String    @db.Text
+  providerId            String    @db.Text
+  userId                String
+  accessToken           String?   @db.Text
+  refreshToken          String?   @db.Text
+  idToken               String?   @db.Text
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?   @db.Text
+  password              String?   @db.Text
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String   @db.Text
+  value      String   @db.Text
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier(length: 191)])
+  @@map("verification")
 }

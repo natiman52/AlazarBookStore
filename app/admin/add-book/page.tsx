@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 const CATEGORIES = [
   "Ethiopian Fiction",
@@ -16,8 +17,7 @@ const CATEGORIES = [
 ];
 
 export default function AddBookPage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [password, setPassword] = useState("");
+  const { data: session, isPending, error, refetch } : { data: any, isPending: boolean, error: Error | null, refetch: () => void } = authClient.useSession();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const router = useRouter();
@@ -32,28 +32,7 @@ export default function AddBookPage() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [bookFile, setBookFile] = useState<File | null>(null);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    try {
-      const res = await fetch("/api/verify-admin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ password }),
-      });
-
-      if (res.ok) {
-        setIsAuthenticated(true);
-      } else {
-        alert("Incorrect password");
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-      alert("An error occurred during login.");
-    }
-  };
+  const role = useMemo(() => session?.user?.role ?? "user", [session]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,7 +46,6 @@ export default function AddBookPage() {
 
     try {
       const data = new FormData();
-      data.append("password", password); // Send password for server-side validation
       data.append("name", formData.name);
       data.append("author", formData.author);
       data.append("description", formData.description);
@@ -95,6 +73,7 @@ export default function AddBookPage() {
         });
         setImageFile(null);
         setBookFile(null);
+        await refetch();
       } else {
         setMessage(`Error: ${result.error}`);
       }
@@ -106,25 +85,73 @@ export default function AddBookPage() {
     }
   };
 
-  if (!isAuthenticated) {
+  if (isPending) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <form onSubmit={handleLogin} className="bg-white p-8 rounded shadow-md">
-          <h1 className="text-2xl font-bold mb-4">Admin Access</h1>
-          <input
-            type="password"
-            placeholder="Enter Password"
-            className="border p-2 w-full mb-4 rounded"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+        <p className="text-gray-700">Checking authentication...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="bg-white p-6 rounded shadow max-w-sm text-center space-y-3">
+          <p className="text-red-600 font-semibold">Failed to load session.</p>
           <button
-            type="submit"
-            className="bg-blue-600 text-white px-4 py-2 rounded w-full hover:bg-blue-700"
+            onClick={() => refetch()}
+            className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
           >
-            Enter
+            Retry
           </button>
-        </form>
+        </div>
+      </div>
+    );
+  }
+
+  if (!session) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="bg-white p-6 rounded shadow max-w-sm text-center space-y-4">
+          <p className="text-gray-800 font-semibold">
+            Please sign in to add books.
+          </p>
+          <button
+            onClick={() => router.push("/login")}
+            className="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Go to login
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (role !== "admin") {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="bg-white p-6 rounded shadow max-w-sm text-center space-y-4">
+          <p className="text-red-600 font-semibold">
+            You need an admin account to add books.
+          </p>
+          <div className="flex gap-3">
+            <button
+              onClick={() => router.push("/")}
+              className="flex-1 border border-gray-300 px-4 py-2 rounded hover:bg-gray-50"
+            >
+              Back home
+            </button>
+            <button
+              onClick={async () => {
+                await authClient.signOut();
+                router.push("/login");
+              }}
+              className="flex-1 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Switch account
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
