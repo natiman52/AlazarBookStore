@@ -36,7 +36,7 @@ export default function AddBookPage() {
     e.preventDefault();
     // Simple client-side check for now, but the API will also verify.
     // Ideally, this should be a secure session check.
-    if (password === "admin123") {
+    if (password === process.env.ADMIN_PASSWORD ) {
       setIsAuthenticated(true);
     } else {
       alert("Incorrect password");
