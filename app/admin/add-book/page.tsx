@@ -32,14 +32,26 @@ export default function AddBookPage() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [bookFile, setBookFile] = useState<File | null>(null);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simple client-side check for now, but the API will also verify.
-    // Ideally, this should be a secure session check.
-    if (password === process.env.ADMIN_PASSWORD ) {
-      setIsAuthenticated(true);
-    } else {
-      alert("Incorrect password");
+    
+    try {
+      const res = await fetch("/api/verify-admin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password }),
+      });
+
+      if (res.ok) {
+        setIsAuthenticated(true);
+      } else {
+        alert("Incorrect password");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("An error occurred during login.");
     }
   };
 
