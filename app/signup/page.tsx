@@ -69,7 +69,7 @@ export default function SignupPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Usern ame
+              Username
             </label>
             <input
               type="text"
