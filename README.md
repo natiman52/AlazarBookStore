@@ -1,26 +1,44 @@
-## Better Auth Setup
+# Alibooks (Alazar Bookstore)
+===========================
 
-1) Create a `.env.local` with the following variables:
-```
-DATABASE_URL="mysql://USER:PASSWORD@HOST:PORT/DATABASE"
-BETTER_AUTH_SECRET="replace-with-strong-random-string"
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
-# legacy admin guard (remove once admin uses Better Auth)
-ADMIN_PASSWORD="change-me"
-# existing upload config
-TELEGRAM_BOT_TOKEN=""
-TELEGRAM_CHANNEL_ID=""
-```
+Alibooks is a small bookstore web application built with Next.js (App Router), Prisma, and Tailwind CSS. It provides browsing and searching of books, category filters, a sidebar with top-rated books, and simple support/analytics integrations.
 
-2) Run Prisma if the database schema is not applied:
-```
-npx prisma migrate deploy
-```
+## Key features
+- Browse books with pagination and "load more"
+- Search by title, author, and description
+- Category filters and sidebar with best books and random picks
+- Image storage under public/book_images
+- Google Analytics and ads script integration
 
-3) Start the dev server:
-```
-npm run dev
-```
+## Tech stack
+- Next.js (App Router)
+- TypeScript
+- Prisma ORM (configure DATABASE_URL)
+- Tailwind CSS
+- Node.js
 
-Better Auth endpoints are mounted at `/api/auth`. The React client is configured in `lib/auth-client.ts` and the server config lives in `lib/auth.ts`.
+## Quick start
+1. Install dependencies:
+   npm install
+2. Configure environment:
+   - Set DATABASE_URL and BASE_URL in .env
+   - (Optional) Set GA ID or other keys used in layout
+3. Generate Prisma client and run migrations:
+   npx prisma generate
+   npx prisma migrate dev
+4. Run the dev server:
+   npm run dev
+
+## Project layout
+- app/ — Next.js pages and components (Header, Footer, FilterBar, LoadMore, Sidebar)
+- prisma/ — schema and migrations
+- public/book_images — downloaded book images
+- alibooks/app/layout.tsx — global layout and analytics
+
+## Contributing
+Open issues or PRs for fixes and small features. Keep changes minimal and documented.
+
+## License
+
+MIT
 
