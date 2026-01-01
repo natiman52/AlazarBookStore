@@ -19,8 +19,15 @@ export default async function Home({ searchParams }: {searchParams:any}) {
 
   let whereClause: any = params.search 
   ? {
-      name: { search: params.search as string },
-      author: { search: params.search as string },
+    OR:[
+      {
+
+        name: { contains: params.search, },
+      },
+      {
+      author: { contains: params.search },
+      }
+    ]
     }
   : {
       category: { not: "school" }

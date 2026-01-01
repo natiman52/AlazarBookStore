@@ -14,7 +14,7 @@ export default function SearchAway(){
     return (
         <input
         type="text"
-        placeholder="Search books by title, author, or category..."
+        placeholder="Search books by title or author..."
         value={search}
         name='search'
         onChange={e => setSeacrh(e.target.value)}
