@@ -3,8 +3,8 @@
 import { PrismaClient } from '@/prisma/generated/prisma/client'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import {prisma} from '@/lib/prisma';
 
-const prisma = new PrismaClient()
 
 export async function createBlog(formData: FormData) {
   const title = formData.get('title') as string

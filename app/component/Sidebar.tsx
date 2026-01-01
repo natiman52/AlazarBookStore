@@ -1,12 +1,11 @@
 "use client";
-import { useEffect } from "react";
 import { Star, Shuffle, TrendingUp } from "lucide-react";
 import { Book } from "../layout";
 import { useState } from "react";
 
 interface SidebarProps {
   bestBooks: Book[];
-  allBooks: Book[];
+  allBooks: any[];
 }
 
 export default function Sidebar({ bestBooks, allBooks }: SidebarProps) {

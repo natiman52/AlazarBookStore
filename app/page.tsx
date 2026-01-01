@@ -1,9 +1,9 @@
-import { PrismaClient } from "@/prisma/generated/prisma/client";
-import { Catagories } from "./layout";
+ import { Catagories } from "./layout";
 import { FilterBar } from "./component/FilterBar";
 import LoadMore from "./component/LoadMore";
 import Sidebar from "./component/Sidebar";
-import { title } from "process";
+import {prisma} from '@/lib/prisma';
+
 
 const ITEMS_PER_PAGE = 15;
 
@@ -16,35 +16,28 @@ export const metadata = {
 };
 export default async function Home({ searchParams }: {searchParams:any}) {
   const params = await searchParams;
-  const prisma = new PrismaClient();
 
-  let whereClause: any = {};
-  if (params.search) {
-    whereClause = {
-      OR: [
-        { name: { contains: params.search as string } },
-        { author: { contains: params.search as string } }
-      ]
-    };
-  } else {
-    whereClause = {
+  let whereClause: any = params.search 
+  ? {
+      name: { search: params.search as string },
+      author: { search: params.search as string },
+    }
+  : {
       category: { not: "school" }
     };
-  }
 
-  const totalCount = await prisma.books.count({
-    where: whereClause
-  });
-
-  const data = await prisma.books.findMany({
+  const [totalCount, data,bestBooks,allBooksForRandom] = await Promise.all([
+    prisma.books.count({
+        where: whereClause
+      }),
+    prisma.books.findMany({
     take: ITEMS_PER_PAGE,
     where: whereClause,
     orderBy: {
       id: 'desc'
     }
-  });
-
-  const bestBooks = await prisma.books.findMany({
+  }),
+  prisma.books.findMany({
     take: 5,
     orderBy: [
       { rating: 'desc' },
@@ -54,10 +47,9 @@ export default async function Home({ searchParams }: {searchParams:any}) {
       rating: { gte: 7 },
       category: { not: "school" }
     }
-  });
-
-  const allBooksForRandom = await prisma.books.findMany({
-    take: 100,
+  }),
+  prisma.books.findMany({
+    take: 10,
     where: {
       category: { not: "school" }
     },
@@ -65,23 +57,19 @@ export default async function Home({ searchParams }: {searchParams:any}) {
       id: true,
       name: true,
       author: true,
-      description: true,
       rating: true,
-      category: true,
-      image_path: true,
-      file_size: true,
-      channel_message_id: true,
-      file_name: true,
-      download_link: true,
       downloads: true,
       slug: true,
+      category: true
     }
-  });
+  })
+  ])
 
+
+ 
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
   const hasMore = totalPages > 1;
 
-  prisma.$disconnect();
 
   return (
     <>

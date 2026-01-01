@@ -25,6 +25,7 @@ model books {
   downloads          Int?      @default(0)
   slug               String?
   comments           Comment[]
+
 }
 
 model User {

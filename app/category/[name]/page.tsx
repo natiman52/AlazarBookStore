@@ -1,7 +1,7 @@
-import { PrismaClient } from "@/prisma/generated/prisma/client";
-import { Catagories } from "@/app/layout";
+ import { Catagories } from "@/app/layout";
 import { FilterBar } from "@/app/component/FilterBar";
 import LoadMore from "@/app/component/LoadMore";
+import {prisma} from '@/lib/prisma';
 
 import { Metadata } from "next";
 
@@ -15,32 +15,33 @@ export default async function Home({ searchParams,params }: { searchParams:{sear
   const par =await params
   const searc =await searchParams
   
-  const prisma = new PrismaClient()
   const ITEMS_PER_PAGE = 15;
-  
-  let whereClause: any = {};
 
-  if(searc.search){
-    // When searching, include all books (including "exclude" category)
-    whereClause = {
-      category:par.name.replace("%20"," "),
-      OR:[{
-        name:{
-          contains:searc.search.replace("%20"," ")
-        }},
-      {description:{contains:searc.search}},{author:searc.search}]
+const searchTerm = searc.search ? decodeURIComponent(searc.search) : undefined;
+const categoryName = par.name ? decodeURIComponent(par.name) : undefined;
+
+let whereClause: any = {};
+
+if (searchTerm) {
+  whereClause = {
+    category: categoryName,
+    AND: [
+      {
+        OR: [
+          { name: { search: searchTerm } },
+          { author: { search: searchTerm } }
+        ]
+      }
+    ]
+  };
+} else {
+  whereClause = {
+    category: {
+      equals: categoryName,
+      not: "school"
     }
-  }
-  else{
-    // When not searching, exclude books with "exclude" category
-    console.log(par.name.replace("%20"," "))
-    whereClause = {
-        category:par.name.replace("%20"," "),
-        NOT: {
-          category: "school"
-        }
-    }
-  }
+  };
+}
 
   const [data, totalCount] = await Promise.all([
     prisma.books.findMany({

@@ -1,14 +1,13 @@
 import { MetadataRoute } from "next";
-import { PrismaClient } from "@/prisma/generated/prisma/client";
-import { Catagories } from "./layout";
+ import { Catagories } from "./layout";
+import {prisma} from '@/lib/prisma';
 
 const baseUrl = 'https://yemesahftalem.com';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const client = new PrismaClient();
     
     // Get all books with their slugs and last modified dates
-    const books = await client.books.findMany({
+    const books = await prisma.books.findMany({
         select: {
             id: true,
             slug: true,
@@ -60,7 +59,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         },
     ];
 
-    await client.$disconnect();
 
     return [
         ...staticPages,

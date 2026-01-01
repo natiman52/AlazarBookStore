@@ -1,5 +1,5 @@
-import { PrismaClient } from "@/prisma/generated/prisma/client";
-import { NextRequest, NextResponse } from "next/server";
+ import { NextRequest, NextResponse } from "next/server";
+import {prisma} from '@/lib/prisma';
 
 const ITEMS_PER_PAGE = 15;
 
@@ -9,7 +9,6 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get("page") || "1", 10);
     const search = searchParams.get("search") || "";
     
-    const prisma = new PrismaClient();
     const skip = (page - 1) * ITEMS_PER_PAGE;
 
     // Build where clause for search

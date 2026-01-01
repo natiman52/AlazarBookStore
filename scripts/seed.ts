@@ -1,10 +1,11 @@
 import { PrismaClient } from "../prisma/generated/prisma/client";
 import { config } from "dotenv";
+import {prisma} from '@/lib/prisma';
 
 // Load environment variables
 config();
 
-const prisma = new PrismaClient();
+
 
 // Helper function to generate slug from book name and author
 function generateSlug(name: string, author: string): string {

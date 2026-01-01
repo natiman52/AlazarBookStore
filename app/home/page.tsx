@@ -1,16 +1,14 @@
-import { PrismaClient } from "@/prisma/generated/prisma/client";
-import BookCard from "../component/bookcard";
+ import BookCard from "../component/bookcard";
 import Link from "next/link";
 import { BookOpen, TrendingUp, Star, ArrowRight, Library } from 'lucide-react';
 import AnimatedBackground from "../component/AnimatedBackground";
+import {prisma} from '@/lib/prisma';
 
 export const metadata = {
   title:"Yemesahft Alem"
 }
 export default async function HomePage() {
-  const prisma = new PrismaClient()
-  
-  // Get featured books (top rated or most downloaded)
+
   const featuredBooks = await prisma.books.findMany({
     take: 6,
     orderBy: [
@@ -25,7 +23,6 @@ export default async function HomePage() {
     }
   });
   
-  prisma.$disconnect()
 
   return (
     <main className="w-full">

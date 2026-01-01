@@ -1,26 +1,36 @@
-import { PrismaClient } from "@/prisma/generated/prisma/client";
-import { ArrowLeft, Download, Calendar, FileText, User, Tag, TrendingUp, MessageCircle } from 'lucide-react';
+ import { ArrowLeft, Download, Calendar, FileText, User, Tag, TrendingUp, MessageCircle } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import GetByte from "../component/clients/getBytes";
 import { Metadata } from 'next';
 import Comments from "../component/clients/comments";
+import {prisma} from '@/lib/prisma';
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const param = await params
-  const prisma = new PrismaClient()
   const book = await prisma.books.findFirst({
     where: { slug: param.id }
   })
   
   return {
     title: book?.name || 'Book Details',
+    description: book?.description || 'Detailed information about the book',
+    openGraph: {
+      title: book?.name || 'Book Details',
+      description: book?.description || 'Detailed information about the book',
+      url: `${process.env.NEXT_PUBLIC_BASE_URL}/book/${book?.slug}`,
+      images: [
+        {
+          url: book?.image_path ? `${process.env.NEXT_PUBLIC_BASE_URL}/book_images/${book.image_path.split("/").at(-1)}` : `${process.env.NEXT_PUBLIC_BASE_URL}/default_image.png`,
+          alt: book?.name || 'Book Cover',
+        },
+      ],
+    },
   }
 }
 
 export default async function Home({ params }: { params: { id: string } }) {
   const param =await params
-    const prisma = new PrismaClient()
-    const book = await prisma.books.findFirst({
+  const book = await prisma.books.findFirst({
       where:{slug:param.id}
     })
     const relatedBooks = await prisma.books.findMany({

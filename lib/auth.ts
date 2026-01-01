@@ -1,19 +1,14 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { PrismaClient } from "@/prisma/generated/prisma/client";
-import { customSession,username } from "better-auth/plugins";
+ import { customSession,username } from "better-auth/plugins";
+import {prisma} from '@/lib/prisma';
+
 /**
  * Reuse a single Prisma instance across hot reloads
  * to avoid exhausting the database connection pool.
  */
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
 
-const prisma = globalForPrisma.prisma ?? new PrismaClient();
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
-}
+
 
 export const auth = betterAuth({
   /**

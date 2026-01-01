@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@/prisma/generated/prisma/client";
 import { auth } from "@/lib/auth";
 import { writeFile } from "fs/promises";
 import path from "path";
 import fs from "fs";
+import {prisma} from '@/lib/prisma';
 
-const prisma = new PrismaClient();
+
 
 // Ensure upload directory exists
 const UPLOAD_DIR = path.join(process.cwd(), "public", "book_images");
