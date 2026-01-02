@@ -656,6 +656,11 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         )
         return
 
+    if query.data.startswith('list_'):
+        page = int(query.data.split('_')[1])
+        context.args = [str(page)]
+        await list_books(update, context)
+
     if query.data.startswith('detail_'):
         book_id = int(query.data.split('_')[1])
         book = get_book_details(book_id)
@@ -714,31 +719,57 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
                 parse_mode='Markdown'
             )
 async def list_books(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Lists available books with detail buttons."""
+    """Lists available books with pagination."""
     user_id = update.effective_user.id
     if not await is_member(user_id, context):
         await start(update, context)
         return
+
+    # Determine current page (default to 0)
+    page = 0
+    if context.args and context.args[0].isdigit():
+        page = int(context.args[0])
 
     books = get_all_books()
     if not books:
         await update.message.reply_text("No books have been added yet.")
         return
 
-    keyboard = []
-    message_text = "📚 **Available Books** 📚\n\n"
+    items_per_page = 10
+    total_pages = (len(books) + items_per_page - 1) // items_per_page
     
-    for book in books:
-        message_text += f"**{book['name']}** by {book['author']} | Category: {book['category']}\n"
-        keyboard.append([InlineKeyboardButton(f"Details & Download: {book['name']}", callback_data=f"detail_{book['id']}")])
-        
+    # Slice the list for the current page
+    start_idx = page * items_per_page
+    end_idx = start_idx + items_per_page
+    current_items = books[start_idx:end_idx]
+
+    keyboard = []
+    for book in current_items:
+        # Each book gets a button for details
+        keyboard.append([InlineKeyboardButton(f"📖 {book['name']}", callback_data=f"detail_{book['id']}")])
+
+    # Pagination buttons
+    nav_buttons = []
+    if page > 0:
+        nav_buttons.append(InlineKeyboardButton("⬅️ Back", callback_data=f"list_{page - 1}"))
+    
+    # Add page indicator
+    nav_buttons.append(InlineKeyboardButton(f"{page + 1}/{total_pages}", callback_data="noop"))
+    
+    if end_idx < len(books):
+        nav_buttons.append(InlineKeyboardButton("Next ➡️", callback_data=f"list_{page + 1}"))
+    
+    if nav_buttons:
+        keyboard.append(nav_buttons)
+
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    await update.message.reply_text(
-        message_text,
-        reply_markup=reply_markup,
-        parse_mode='Markdown'
-    )
+    text = f"📚 **Available Books (Page {page + 1})**\nClick a book to see details and download."
+    
+    if update.callback_query:
+        await update.callback_query.edit_message_text(text, reply_markup=reply_markup, parse_mode='Markdown')
+    else:
+        await update.message.reply_text(text, reply_markup=reply_markup, parse_mode='Markdown')
 def main():
     """Starts the bot."""
     application = Application.builder().token(TOKEN).get_updates_connect_timeout(10.0).get_updates_read_timeout(60.0).build()
