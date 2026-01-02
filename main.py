@@ -9,6 +9,7 @@ import requests
 from typing import List, Dict, Any, Optional
 import dotenv
 from urllib.parse import urlparse
+import re
 dotenv.load_dotenv()
 # Set up logging
 logging.basicConfig(
@@ -57,6 +58,12 @@ NAME, DESCRIPTION, AUTHOR, RATING, CATEGORY, IMAGE, DOWNLOAD = range(7)
 # Conversation states for BULK ADDITION
 BULK_UPLOAD, BULK_FILE = range(7, 9)
 
+
+# Utils
+def escape_markdown(text):
+    """Helper to escape special markdown characters."""
+    # List of characters that need escaping in Markdown (V1)
+    return re.sub(r'([_*\[\]()~`>#+\-=|{}.!])', r'\\\1', str(text))
 # --- DATABASE FUNCTIONS ---
 
 def get_db_connection():
@@ -666,39 +673,42 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         book = get_book_details(book_id)
 
         if book:
+            try:
+                if book.get('channel_message_id'):
+                    await context.bot.copy_message(
+                        chat_id=query.message.chat_id,
+                        from_chat_id=FILE_STORAGE_CHANNEL_ID,
+                        message_id=book['channel_message_id']
+                    )
+                elif book.get("download_link"):
+                    await query.message.reply_text(
+                        f"🔗 <b>Direct Download Link:</b>\n{book['download_link']}",
+                        parse_mode='HTML'
+                )
+            except Exception as e:
+                logger.error(f"File delivery error: {e}")
+                await query.message.reply_text("⚠️ Could not deliver the file. Please contact admin.")
             caption = (
-                f"📖 **{book['name']}**\n"
-                f"✍️ **Author:** {book['author']}\n"
                 f"🏷️ **Category:** {book.get('category', 'N/A')}\n"
                 f"⭐️ **Rating:** {book.get('rating', 'N/A')}\n"
                 f"📦 **Size:** {format_size(book.get('file_size'))}\n\n"
-                f"**Description:**\n{book['description']}"
+                f"**Description:**\n{escape_markdown(book.get('description', 'N/A'))}"
             )
-            
-            # Create a Deep Link URL
-            deep_link_url = f"https://t.me/{context.bot.username}?start={book_id}"
-            
-            download_keyboard = [[InlineKeyboardButton("⬇️ Get Book (Deep Link)", url=deep_link_url)]]
-            reply_markup = InlineKeyboardMarkup(download_keyboard)
-
             if book.get('image_path') and os.path.exists(book['image_path']):
                 try:
-                    # Send with local image
                     with open(book['image_path'], 'rb') as image_file:
                         await context.bot.send_photo(
                             chat_id=query.message.chat_id,
                             photo=image_file,
                             caption=caption,
-                            reply_markup=reply_markup,
                             parse_mode='Markdown'
                         )
                 except Exception as e:
                     logger.error(f"Failed to send photo for book {book_id}: {e}")
-                    # Fallback to text message if image fails
-                    await query.message.reply_text(caption, reply_markup=reply_markup, parse_mode='Markdown')
+                    await query.message.reply_text(caption, parse_mode='Markdown')
             else:
-                 # Send without image
-                await query.message.reply_text(caption, reply_markup=reply_markup, parse_mode='Markdown')
+                await query.message.reply_text(caption, parse_mode='Markdown')
+
         else:
             await query.message.reply_text("Book details not found.")
 
